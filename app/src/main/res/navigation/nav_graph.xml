@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_characters">
+    <fragment
+        android:id="@+id/nav_characters"
+        android:name="com.example.rickmorty.UI.view.CharactersFragment"
+        tools:layout="@layout/fragment_characters">
+
+    </fragment>
+    <fragment
+        android:id="@+id/nav_character"
+        android:name="com.example.rickmorty.UI.view.Character"
+        tools:layout="@layout/fragment_character"/>
+
+    <fragment
+        android:id="@+id/nav_episodes"
+        android:name="com.example.rickmorty.UI.view.EpisodesFragment"
+        tools:layout="@layout/fragment_episodes"/>
+
+    <fragment
+        android:id="@+id/nav_locations"
+        android:name="com.example.rickmorty.UI.view.LocationsFragment"
+        tools:layout="@layout/fragment_locations"/>
+    <fragment
+        android:id="@+id/nav_episode"
+        android:name="com.example.rickmorty.UI.view.EpisodeFragment"
+        tools:layout="@layout/fragment_episode"/>
+    <fragment
+        android:id="@+id/nav_location"
+        android:name="com.example.rickmorty.UI.view.LocationFragment"
+        tools:layout="@layout/fragment_location"/>
+</navigation>
