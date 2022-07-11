@@ -18,4 +18,5 @@
     <string name="locations">Locations</string>
     <string name="airdate">AirDate:</string>
     <string name="residents">Residents</string>
+    <string name="rick_and_morty">Rick and Morty</string>
 </resources>

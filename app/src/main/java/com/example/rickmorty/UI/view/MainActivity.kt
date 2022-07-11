@@ -2,6 +2,9 @@ package com.example.rickmorty.UI.view
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
@@ -26,8 +29,23 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val drawerLayout = binding.drawerLayout
         val navigationView = binding.navView
+        val toolbar = binding.toolbar
+
+
+
+        val imageView:ImageView = binding.imageView2
+        imageView.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                drawerLayout.open()
+            }
+
+        })
+
+
+
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
 
         navigationView.setNavigationItemSelectedListener {
