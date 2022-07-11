@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/drawable/RickMorty_launcher_background.xml" value="0.196" />
         <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/layout/fragment_character.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/layout/fragment_characters.xml" value="0.358695652173913" />
@@ -20,6 +21,7 @@
         <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/layout/items_tab_episodes.xml" value="0.33" />
         <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/layout/tool_bar.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/menu/navigation_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Gabriel/AndroidStudioProjects/RickMorty/app/src/main/res/mipmap-anydpi-v26/RickMorty_launcher.xml" value="0.196" />
       </map>
     </option>
   </component>
