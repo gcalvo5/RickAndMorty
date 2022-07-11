@@ -1,6 +1,7 @@
 package com.example.rickmorty.UI.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -37,16 +38,15 @@ class EpisodesFragment : Fragment() {
 
     lateinit var binding:FragmentEpisodesBinding
     private val episodeViewModel:EpisodeViewModel by viewModels()
+    lateinit var adapter:AdapterEpisodes
+    lateinit var recyclerView:RecyclerView
+    lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
-        }
-        GlobalScope.launch (Dispatchers.Main){
-            episodeViewModel.callForAllEpisodes()
-
         }
     }
 
@@ -56,15 +56,54 @@ class EpisodesFragment : Fragment() {
     ): View? {
 
         binding = FragmentEpisodesBinding.inflate(inflater)
-        val recyclerView:RecyclerView = binding.episodesFragmentRecycler
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        recyclerView= binding.episodesFragmentRecycler
+        linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        recyclerView.layoutManager = linearLayoutManager
+
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                    //scrolled to BOTTOM
+                    GlobalScope.launch (Dispatchers.Main){
+
+
+
+                        if(!episodeViewModel.episodes.info.next.isNullOrEmpty()){
+                            episodeViewModel.callForAllEpisodesNextPageByUrl(episodeViewModel.episodes.info.next)
+                        }
 
 
 
 
-        episodeViewModel.episodeViewModel.observe(viewLifecycleOwner, Observer {
-            var adapter = AdapterEpisodes(it.episodes)
+                    }
+
+                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                    //scrolled to TOP
+                }
+            }
+        })
+
+
+
+        GlobalScope.launch (Dispatchers.Main){
+            episodeViewModel.callForAllEpisodes()
             recyclerView.adapter = adapter
+        }
+
+        episodeViewModel.episodeListViewModel.observe(viewLifecycleOwner, Observer {
+            if (::adapter.isInitialized){
+                Log.e("test", "episode adapter inicializado " + it[1].name)
+                adapter.notifyDataSetChanged()
+            }
+            else {
+
+                adapter = AdapterEpisodes(it)
+                recyclerView.adapter = adapter
+            }
+
+
+
 
         })
 

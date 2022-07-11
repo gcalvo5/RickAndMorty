@@ -49,6 +49,7 @@ class EpisodeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        characterViewModel.cleanCharacterList()
         binding = FragmentEpisodeBinding.inflate(layoutInflater)
         val episodeCharactersUrls = arguments?.getStringArray("characters")
         GlobalScope.launch (Dispatchers.Main){

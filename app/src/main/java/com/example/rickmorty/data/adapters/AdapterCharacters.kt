@@ -9,19 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickmorty.R
 import com.example.rickmorty.UI.view.Hilt_MainActivity
+import com.example.rickmorty.UI.viewmodel.CharacterViewModel
 import com.example.rickmorty.data.model.Character
+import com.example.rickmorty.data.model.CharacterInit
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AdapterCharacters @Inject constructor(private val characterList: List<Character>): RecyclerView.Adapter<AdapterCharacters.ViewHolder>() {
+class AdapterCharacters @Inject constructor(private val characterList: List<Character>, private val characterInit: CharacterInit): RecyclerView.Adapter<AdapterCharacters.ViewHolder>() {
     lateinit var navController:NavController
 
 
@@ -59,6 +62,7 @@ class AdapterCharacters @Inject constructor(private val characterList: List<Char
                 bundle.putString("originUrl", characterList[holder.adapterPosition].origin.url)
                 bundle.putString("image", characterList[holder.adapterPosition].image)
                 bundle.putStringArrayList("episodesUrls", characterList[holder.adapterPosition].episode)
+                characterInit.characterList.clear()
                 navController.navigate(R.id.nav_character, bundle)
             }
 

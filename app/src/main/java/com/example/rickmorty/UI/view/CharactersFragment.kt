@@ -1,10 +1,11 @@
 package com.example.rickmorty.UI.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,16 +38,15 @@ class CharactersFragment : Fragment() {
     private lateinit var binding: FragmentCharactersBinding
     private val characterViewModel:CharacterViewModel by viewModels()
     private lateinit var characterRecycler:RecyclerView
-
+    lateinit var adapter:AdapterCharacters
+    lateinit var layoutManager: LinearLayoutManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        GlobalScope.launch(Dispatchers.Main) {
-            characterViewModel.callForCharacterList()
-        }
+
     }
 
     override fun onCreateView(
@@ -56,19 +56,67 @@ class CharactersFragment : Fragment() {
 
         binding = FragmentCharactersBinding.inflate(inflater)
         characterRecycler = binding.recyclerCharacters
-        characterRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+        characterRecycler.layoutManager = layoutManager
+
+
+
+
+
+        characterRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                    //scrolled to BOTTOM
+                    GlobalScope.launch (Dispatchers.Main){
+
+
+
+                        if(!characterViewModel.characters.info.next.isNullOrEmpty()){
+                            binding.charactersProgressBar.visibility = View.VISIBLE
+                            characterViewModel.callForNextCharactersByUrl(characterViewModel.characters.info.next!!)
+                            binding.charactersProgressBar.visibility = View.GONE
+                        }
+
+
+
+
+                    }
+
+                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                    //scrolled to TOP
+                }
+            }
+        })
+
+
+
+        GlobalScope.launch(Dispatchers.Main) {
+            binding.charactersProgressBar.visibility = View.VISIBLE
+            characterViewModel.callForCharacterList()
+            binding.charactersProgressBar.visibility = View.GONE
+            characterRecycler.adapter = adapter
+        }
 
 
 
         characterViewModel.characterViewModel.observe(viewLifecycleOwner, Observer {
-            var adapter:AdapterCharacters = AdapterCharacters(it)
-            characterRecycler.adapter = adapter
-            characterViewModel.cleanCharacterList()
+            if (::adapter.isInitialized){
+                Log.e("test", "character adapter inicializado")
+                adapter.notifyDataSetChanged()
+
+            }
+            else{
+                adapter = AdapterCharacters(it,characterViewModel.characterInit)
+                characterRecycler.adapter = adapter
+            }
+
         })
 
         // Inflate the layout for this fragment
         return binding.root
     }
+
+
 
     companion object {
         /**

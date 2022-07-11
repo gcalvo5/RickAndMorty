@@ -37,6 +37,7 @@ class LocationsFragment : Fragment() {
 
     lateinit var binding:FragmentLocationsBinding
     private val locationViewModel:LocationViewModel by viewModels()
+    lateinit var adapter:AdapterLocations
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +46,7 @@ class LocationsFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        GlobalScope.launch (Dispatchers.Main){
-            locationViewModel.callForAllLocations()
 
-        }
 
     }
 
@@ -62,12 +60,47 @@ class LocationsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
 
 
+        GlobalScope.launch (Dispatchers.Main){
+            locationViewModel.callForAllLocations()
+
+        }
 
 
-        locationViewModel.locationViewModel.observe(viewLifecycleOwner, Observer {
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0) {
+                    //scrolled to BOTTOM
+                    GlobalScope.launch (Dispatchers.Main){
 
-                val adapter = AdapterLocations(it.locations)
+
+
+                        if(!locationViewModel.locations.info.next.isNullOrEmpty()){
+                            locationViewModel.callForAllLocationsNextPageById(locationViewModel.locations.info.next)
+                        }
+
+
+
+
+                    }
+
+                } else if (!recyclerView.canScrollVertically(-1) && dy < 0) {
+                    //scrolled to TOP
+                }
+            }
+        })
+
+
+
+
+        locationViewModel.locationsListViewModel.observe(viewLifecycleOwner, Observer {
+            if(::adapter.isInitialized){
+                adapter.notifyDataSetChanged()
+            }
+            else{
+                adapter = AdapterLocations(it)
                 recyclerView.adapter = adapter
+            }
+
 
 
 

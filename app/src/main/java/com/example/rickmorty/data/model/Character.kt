@@ -24,6 +24,6 @@ data class Origin(@SerializedName("name") val name:String, @SerializedName("url"
 data class Info(
     @SerializedName("count") val count:String,
     @SerializedName("pages") val pages:String,
-    @SerializedName("next") val next:String,
+    @SerializedName("next") val next:String?,
     @SerializedName("prev") val prev:String?
     )
